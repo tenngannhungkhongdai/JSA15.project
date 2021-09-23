@@ -1,0 +1,74 @@
+html {
+    background-image: url('http://sakk-klub.hu/wp-content/uploads/2015/12/BvsC_Wallpaper01.jpg');
+	background-size: cover;
+}
+.container{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.contain{
+    width: 610px;
+    height: 610px;
+    background-color: chocolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.conta{
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+.row{
+    width: 600px;
+    height: 75px;
+    display: flex;
+    flex-direction: row;
+}
+.square{
+    width: 75px;
+    height: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.bpiece{
+    color: black;
+    font-size: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.wpiece{
+    color: white;
+    font-size: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.di{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: blue;
+}
+.giet{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    border-color: white;
+}
+.special{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: purple;
+}
