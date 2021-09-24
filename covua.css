@@ -39,7 +39,7 @@ html {
 }
 .bpiece{
     color: black;
-    font-size: 60px;
+    font-size: 70px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -47,7 +47,7 @@ html {
 }
 .wpiece{
     color: white;
-    font-size: 60px;
+    font-size: 70px;
     display: flex;
     flex-direction: column;
     justify-content: center;

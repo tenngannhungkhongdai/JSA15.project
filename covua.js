@@ -22,7 +22,8 @@ b101={
     position: banco[7][4],
     avatar: '&#9818;',
     moved: 'no',
-    checked: 'no'
+    checked: 'no',
+    checkable:'yes'
 },
 w001={
     id: 'w001',
@@ -31,7 +32,8 @@ w001={
     position: banco[0][4],
     avatar: '&#9812;',
     moved: 'no',
-    checked: 'no'
+    checked: 'no',
+    checkable:'yes'
 },
 b151={
     id: 'b151',
@@ -272,6 +274,20 @@ w018={
     position: banco[1][7],
     avatar: '&#9817;',
     moved: 'no'
+},
+wclone={
+    id: '',
+    side: 'wpiece',
+    type: 'wclone',
+    position:'',
+    avatar: ''
+},
+bclone={
+    id: '',
+    side: 'bpiece',
+    type: 'bclone',
+    position:'',
+    avatar: ''
 }
 ]
 function xepbanco(){
@@ -504,7 +520,7 @@ async function chess(){
                             quanco[p].position=banco[0][6]
                             control()
                             if(quanco[p].checked=='no'){
-                                document.getElementById(banco[0][6]).innerHTML=`<button class="castle" onclick="castling('w001',0,6,'w052',0,5)"></button>`
+                                document.getElementById(banco[0][6]).innerHTML=`<button class="special" onclick="castling('w001',0,6,'w052',0,5)"></button>`
                                 movable.push(banco[0][6])
                             }
                         }
@@ -576,7 +592,7 @@ async function chess(){
                             quanco[p].position=banco[7][6]
                             control()
                             if(quanco[p].checked=='no'){
-                                document.getElementById(banco[7][6]).innerHTML=`<button class="castle" onclick="castling('b101',7,6,'b152',7,5)"></button>`
+                                document.getElementById(banco[7][6]).innerHTML=`<button class="special" onclick="castling('b101',7,6,'b152',7,5)"></button>`
                                 movable.push(banco[7][6])
                             }
                         }
@@ -587,6 +603,7 @@ async function chess(){
             }
         }
     }
+    await capture()
 }
 function move(p,x,y,limit){
     var n=0
@@ -871,6 +888,43 @@ function control(){
                 danger(p,1,-1,7)
                 danger(p,-1,-1,7)
             }
+            else if(quanco[p].type=='wking'){
+                if(turn=='black'){
+                    quanco[p].checkable='no'
+                }
+                else if(turn=='white'){
+                    quanco[p].checkable='yes'
+                }
+                if(quanco[p].checkable=='yes'){
+                    danger(p,1,0,1)
+                    danger(p,0,1,1)
+                    danger(p,0,-1,1)
+                    danger(p,-1,0,1)
+                    danger(p,1,1,1)
+                    danger(p,-1,1,1)
+                    danger(p,1,-1,1)
+                    danger(p,-1,-1,1)
+                }    
+
+            }
+            else if(quanco[p].type=='bking'){
+                if(turn=='white'){
+                    quanco[p].checkable='no'
+                }
+                else if(turn=='black'){
+                    quanco[p].checkable='yes'
+                }
+                if(quanco[p].checkable=='yes'){
+                    danger(p,1,0,1)
+                    danger(p,0,1,1)
+                    danger(p,0,-1,1)
+                    danger(p,-1,0,1)
+                    danger(p,1,1,1)
+                    danger(p,-1,1,1)
+                    danger(p,1,-1,1)
+                    danger(p,-1,-1,1)
+                }
+            }
         }
     }
 }
@@ -961,6 +1015,12 @@ async function scout(p,x,y,limit){
         d+y<=7
     ){
         var check=quanco[p].checked
+        if(quanco[p].side=='wpiece'){
+            wclone.position=quanco[p].position
+        }
+        else if(quanco[p].side=='bpiece'){
+            bclone.position=quanco[p].position
+        }
         quanco[p].position=banco[n+x][d+y]
         await control()
         quanco[p].position=banco[n][d]
@@ -969,8 +1029,9 @@ async function scout(p,x,y,limit){
             kill(p,x,y,limit)
         }
         quanco[p].checked=check
+        wclone.position=''
+        bclone.position=''
     }
-    await capture()
 }
 async function castling(k,xk,yk,r,xr,yr){
     var k1=0
@@ -1014,7 +1075,7 @@ function enpassant(p){
                 quanco[t].position==banco[n][d+1]&&
                 quanco[t].type=='bpawn'
             ){
-                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="unpassant(${p},${n},${d},${t});move(${t},-1,0,1);kill(${t},-1,1,1);kill(${t},-1,-1,1)">${quanco[t].avatar}</span>`
+                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="remove();unpassant(${p},${n},${d},${t});move(${t},-1,0,1);kill(${t},-1,1,1);kill(${t},-1,-1,1)">${quanco[t].avatar}</span>`
                 break
             }
             else{t++}
@@ -1025,7 +1086,7 @@ function enpassant(p){
                 quanco[t].position==banco[n][d-1]&&
                 quanco[t].type=='bpawn'
             ){
-                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="unpassant(${p},${n},${d},${t});move(${t},-1,0,1);kill(${t},-1,1,1);kill(${t},-1,-1,1)">${quanco[t].avatar}</span>`
+                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="remove();unpassant(${p},${n},${d},${t});move(${t},-1,0,1);kill(${t},-1,1,1);kill(${t},-1,-1,1)">${quanco[t].avatar}</span>`
                 break
             }
             else{t++}
@@ -1038,7 +1099,7 @@ function enpassant(p){
                 quanco[t].position==banco[n][d+1]&&
                 quanco[t].type=='wpawn'
             ){
-                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="unpassant(${p},${n},${d},${t});move(${t},1,0,1);kill(${t},1,1,1);kill(${t},1,-1,1)">${quanco[t].avatar}</span>`
+                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="remove();unpassant(${p},${n},${d},${t});move(${t},1,0,1);kill(${t},1,1,1);kill(${t},1,-1,1)">${quanco[t].avatar}</span>`
                 break
             }
             else{t++}
@@ -1049,7 +1110,7 @@ function enpassant(p){
                 quanco[t].position==banco[n][d-1]&&
                 quanco[t].type=='wpawn'
             ){
-                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="unpassant(${p},${n},${d},${t});move(${t},1,0,1);kill(${t},1,1,1);kill(${t},1,-1,1)">${quanco[t].avatar}</span>`
+                document.getElementById(quanco[t].position).innerHTML=`<span class="${quanco[t].side}" id="${quanco[t].id}" onclick="remove();unpassant(${p},${n},${d},${t});move(${t},1,0,1);kill(${t},1,1,1);kill(${t},1,-1,1)">${quanco[t].avatar}</span>`
                 break
             }
             else{t++}
