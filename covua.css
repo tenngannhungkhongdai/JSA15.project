@@ -6,7 +6,7 @@ html {
     width: 100vw;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
 }
 .contain{
     width: 610px;
@@ -71,4 +71,24 @@ html {
     height: 60px;
     border-radius: 50%;
     background-color: purple;
+}
+.left{
+    width: 250px;
+    height: 98vh;
+}
+.right{
+    width: 250px;
+    height: 98vh;
+}
+.save{
+    width: 250px;
+    height: 16vh;
+    background-color: rgba( 0, 0, 0, 0.3);
+    font-size: 30px;
+    color: white;
+}
+.border{
+    width: 250px;
+    height: 1px;
+    background-color: white;
 }
