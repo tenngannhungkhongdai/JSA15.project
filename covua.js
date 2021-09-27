@@ -291,6 +291,9 @@ bclone={
 }
 ]
 function xepbanco(){
+    for(i=0;i<o.length;i++){
+        o[i].innerHTML=''
+    }
     for(b=0;b<32;b++){
         document.getElementById(otrang[b]).style.backgroundColor='rgb(155,155,155)'
         document.getElementById(oden[b]).style.backgroundColor='rgb(100,100,100)'
@@ -650,7 +653,6 @@ async function remove(){
     await mercy()
 }
 async function moved(p,x,y){
-    document.getElementById(quanco[p].position).innerHTML=''
     var en=0
     if(
         turn=='black'&&
@@ -718,7 +720,6 @@ function kill(p,x,y,limit){
 }
 async function killed(p,x,y,t){
     quanco[t].id='dead'
-    document.getElementById(quanco[p].position).innerHTML=''
     quanco[p].position=banco[x][y]
     quanco[p].moved='yes'
     await charge()
@@ -1049,8 +1050,6 @@ async function castling(k,xk,yk,r,xr,yr){
         else{r1++}
     }
     if(k1<quanco.length&&r1<quanco.length){
-        document.getElementById(quanco[k1].position).innerHTML=''
-        document.getElementById(quanco[r1].position).innerHTML=''
         quanco[k1].position=banco[xk][yk]
         quanco[r1].position=banco[xr][yr]
         quanco[k1].moved='yes'
@@ -1129,17 +1128,54 @@ function unpassant(p,n,d,t){
 }
 async function impassant(p,n,d,t){
     if (turn=='white') {
-        document.getElementById(quanco[p].position).innerHTML=''
-        document.getElementById(quanco[t].position).innerHTML=''
         quanco[p].id='dead'
         quanco[t].position=banco[n-1][d]
     }
     if (turn=='black') {
-        document.getElementById(quanco[p].position).innerHTML=''
-        document.getElementById(quanco[t].position).innerHTML=''
         quanco[p].id='dead'
         quanco[t].position=banco[n+1][d]
     }        
     await remove()
     await xepbanco()
+}
+for(save=1;save<7;save++){
+    progress(save)
+}
+function upload(save){
+    if(turn=='white'){
+        turn='black'
+    }
+    else if(turn=='black'){
+        turn='white'
+    }
+    var saving=[quanco,turn]
+    localStorage.setItem(`file${save}`,JSON.stringify(saving))
+    if(turn=='white'){
+        turn='black'
+    }
+    else if(turn=='black'){
+        turn='white'
+    }
+}
+function progress(save){
+    var saved=JSON.parse(localStorage.getItem(`file${save}`))
+    if(saved==''){
+        document.getElementById(`filesave${save}`).innerHTML=`<button class="save" onclick="upload(${save});progress(${save})">EMPTY</button>`
+    }
+    else{
+        document.getElementById(`filesave${save}`).innerHTML=`
+        <button class="update" onclick="upload(${save});progress(${save})">UPLOAD</button>
+        <button class="update" onclick="retrieve(${save})">RETRIEVE</button>
+        <button class="update" onclick="takeaway(${save});progress(${save})">DELETE</button>
+        `
+    }
+}
+async function retrieve(save){
+    var saved=JSON.parse(localStorage.getItem(`file${save}`))
+    quanco=saved[0]
+    turn=saved[1]
+    await xepbanco()
+}
+function takeaway(save){
+    localStorage.setItem(`file${save}`,JSON.stringify(''))
 }
