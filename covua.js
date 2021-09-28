@@ -1026,7 +1026,11 @@ function capture(){
         }
         else{bking++}
     }
-    if(bking<quanco.length){if(quanco[bking].checked=='yes'){document.getElementById(quanco[bking].position).style.backgroundColor='red'}}
+    if(bking<quanco.length){if(quanco[bking].checked=='yes'){
+        document.getElementById(quanco[bking].position).style.backgroundColor='red'
+        var text=document.getElementById(`white${taketurn-1}`).textContent
+        document.getElementById(`white${taketurn-1}`).innerHTML=`${text} +`
+    }}
     var wking=0
     while(wking<quanco.length){
         if(quanco[wking].id=='w001'){
@@ -1034,7 +1038,11 @@ function capture(){
         }
         else{wking++}
     }
-    if(wking<quanco.length){if(quanco[wking].checked=='yes'){document.getElementById(quanco[wking].position).style.backgroundColor='red'}}
+    if(wking<quanco.length){if(quanco[wking].checked=='yes'){
+        document.getElementById(quanco[wking].position).style.backgroundColor='red'
+        var text=document.getElementById(`black${taketurn-1}`).textContent
+        document.getElementById(`black${taketurn-1}`).innerHTML=`${text} +`
+    }}
     if(turn=='black'){
         if(quanco[bking].checked=='yes'){
             alert('black king captured')
