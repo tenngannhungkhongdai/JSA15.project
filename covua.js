@@ -10,6 +10,8 @@ let banco=[
 ]
 var movable=[]
 var killable=[]
+var movement=[]
+var taketurn=0
 var o=document.getElementsByClassName('square')
 var turn='white'
 var otrang=['b1','d1','f1','h1','a2','c2','e2','g2','b3','d3','f3','h3','a4','c4','e4','g4','b5','d5','f5','h5','a6','c6','e6','g6','b7','d7','f7','h7','a8','c8','e8','g8']
@@ -290,7 +292,7 @@ bclone={
     avatar: ''
 }
 ]
-function xepbanco(){
+async function xepbanco(){
     for(i=0;i<o.length;i++){
         o[i].innerHTML=''
     }
@@ -313,6 +315,8 @@ function xepbanco(){
         for(add=0;add<piece.length;add++){piece[add].addEventListener('click',chess)}
         var piece = document.getElementsByClassName('bpiece')
         for(add=0;add<piece.length;add++){piece[add].removeEventListener('click',chess)}
+        taketurn++
+        await listing(taketurn)
         turn='black'
     }
     else if(turn=='black'){
@@ -664,8 +668,22 @@ async function moved(p,x,y){
         quanco[p].type=='bpawn'&&
         banco[6].indexOf(quanco[p].position)!=-1
     ){en=1}
+    var past=quanco[p].position
     quanco[p].position=banco[x][y]
     quanco[p].moved='yes'
+    if(2==3){alert('you suck')}
+    else if(quanco[p].type=='wking'){document.getElementById(`white${taketurn}`).innerHTML=`K ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='wqueen'){document.getElementById(`white${taketurn}`).innerHTML=`Q ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='wrook'){document.getElementById(`white${taketurn}`).innerHTML=`R ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='wbishop'){document.getElementById(`white${taketurn}`).innerHTML=`B ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='wknight'){document.getElementById(`white${taketurn}`).innerHTML=`N ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='wpawn'){document.getElementById(`white${taketurn}`).innerHTML=`P ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='bking'){document.getElementById(`black${taketurn}`).innerHTML=`K ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='bqueen'){document.getElementById(`black${taketurn}`).innerHTML=`Q ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='brook'){document.getElementById(`black${taketurn}`).innerHTML=`R ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='bbishop'){document.getElementById(`black${taketurn}`).innerHTML=`B ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='bknight'){document.getElementById(`black${taketurn}`).innerHTML=`N ${past}>${quanco[p].position}`}
+    else if(quanco[p].type=='bpawn'){document.getElementById(`black${taketurn}`).innerHTML=`P ${past}>${quanco[p].position}`}
     await charge()
     await control()
     await remove()
@@ -720,8 +738,22 @@ function kill(p,x,y,limit){
 }
 async function killed(p,x,y,t){
     quanco[t].id='dead'
+    var past=quanco[p].position
     quanco[p].position=banco[x][y]
     quanco[p].moved='yes'
+    if(2==3){alert('you suck')}
+    else if(quanco[p].type=='wking'){document.getElementById(`white${taketurn}`).innerHTML=`K ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='wqueen'){document.getElementById(`white${taketurn}`).innerHTML=`Q ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='wrook'){document.getElementById(`white${taketurn}`).innerHTML=`R ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='wbishop'){document.getElementById(`white${taketurn}`).innerHTML=`B ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='wknight'){document.getElementById(`white${taketurn}`).innerHTML=`N ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='wpawn'){document.getElementById(`white${taketurn}`).innerHTML=`P ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='bking'){document.getElementById(`black${taketurn}`).innerHTML=`K ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='bqueen'){document.getElementById(`black${taketurn}`).innerHTML=`Q ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='brook'){document.getElementById(`black${taketurn}`).innerHTML=`R ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='bbishop'){document.getElementById(`black${taketurn}`).innerHTML=`B ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='bknight'){document.getElementById(`black${taketurn}`).innerHTML=`N ${past}x${quanco[p].position}`}
+    else if(quanco[p].type=='bpawn'){document.getElementById(`black${taketurn}`).innerHTML=`P ${past}x${quanco[p].position}`}
     await charge()
     await control()
     await remove()
@@ -739,7 +771,10 @@ async function charge(){
         for(pawn=1;pawn<9;pawn++){
             var p=0
             while(p<quanco.length){
-                if(quanco[p].id==`w01${pawn}`){
+                if(
+                    quanco[p].id==`w01${pawn}`&&
+                    quanco[p].type=='wpawn'
+                ){
                     break
                 }
                 else{p++}
@@ -751,7 +786,10 @@ async function charge(){
         for(pawn=1;pawn<9;pawn++){
             var p=0
             while(p<quanco.length){
-                if(quanco[p].id==`b11${pawn}`){
+                if(
+                    quanco[p].id==`b11${pawn}`&&
+                    quanco[p].type=='bpawn'
+                ){
                     break
                 }
                 else{p++}
@@ -766,18 +804,26 @@ async function pawnpromotion(p){
         if(a=='queen'){
             quanco[p].type='wqueen'
             quanco[p].avatar='&#9813;'
-        }
+            var text=document.getElementById(`white${taketurn}`).textContent
+            document.getElementById(`white${taketurn}`).innerHTML=`${text} = Q`
+        } 
         else if(a=='rook'){
             quanco[p].type='wrook'
             quanco[p].avatar='&#9814;'
+            var text=document.getElementById(`white${taketurn}`).textContent
+            document.getElementById(`white${taketurn}`).innerHTML=`${text} = R`
         }
         else if(a=='bishop'){
             quanco[p].type='wbishop'
             quanco[p].avatar='&#9815;'
+            var text=document.getElementById(`white${taketurn}`).textContent
+            document.getElementById(`white${taketurn}`).innerHTML=`${text} = B`
         }
         else if(a=='knight'){
             quanco[p].type='wknight'
             quanco[p].avatar='&#9816;'
+            var text=document.getElementById(`white${taketurn}`).textContent
+            document.getElementById(`white${taketurn}`).innerHTML=`${text} = N`
         }
         else{
             alert('queen,rook,bishop,knight')
@@ -789,18 +835,26 @@ async function pawnpromotion(p){
         if(a=='queen'){
             quanco[p].type='bqueen'
             quanco[p].avatar='&#9819;'
+            var text=document.getElementById(`black${taketurn}`).textContent
+            document.getElementById(`black${taketurn}`).innerHTML=`${text} = Q`
         }
         else if(a=='rook'){
             quanco[p].type='brook'
             quanco[p].avatar='&#9820;'
+            var text=document.getElementById(`black${taketurn}`).textContent
+            document.getElementById(`black${taketurn}`).innerHTML=`${text} = R`
         }
         else if(a=='bishop'){
             quanco[p].type='bbishop'
             quanco[p].avatar='&#9821;'
+            var text=document.getElementById(`black${taketurn}`).textContent
+            document.getElementById(`black${taketurn}`).innerHTML=`${text} = B`
         }
         else if(a=='knight'){
             quanco[p].type='bknight'
             quanco[p].avatar='&#9822;'
+            var text=document.getElementById(`black${taketurn}`).textContent
+            document.getElementById(`black${taketurn}`).innerHTML=`${text} = N`
         }
         else{
             alert('queen,rook,bishop,knight')
@@ -1055,6 +1109,22 @@ async function castling(k,xk,yk,r,xr,yr){
         quanco[k1].moved='yes'
         quanco[r1].moved='yes'
     } 
+    if(turn=='black'){
+        if(quanco[k1].position==banco[0][6]){
+            document.getElementById(`white${taketurn}`).innerHTML='0-0'
+        }
+        else if(quanco[k1].position==banco[0][2]){
+            document.getElementById(`white${taketurn}`).innerHTML='0-0-0'
+        }
+    }
+    else if(turn=='white'){
+        if(quanco[k1].position==banco[7][6]){
+            document.getElementById(`black${taketurn}`).innerHTML='0-0'
+        }
+        else if(quanco[k1].position==banco[7][2]){
+            document.getElementById(`black${taketurn}`).innerHTML='0-0-0'
+        }
+    }
     await remove()   
     await xepbanco()
 }
@@ -1129,12 +1199,17 @@ function unpassant(p,n,d,t){
 async function impassant(p,n,d,t){
     if (turn=='white') {
         quanco[p].id='dead'
+        var past=quanco[t].position
         quanco[t].position=banco[n-1][d]
     }
     if (turn=='black') {
         quanco[p].id='dead'
+        var past=quanco[t].position
         quanco[t].position=banco[n+1][d]
-    }        
+    }  
+    if(2==3){alert('you suck')}
+    else if(quanco[t].type=='wpawn'){document.getElementById(`white${taketurn}`).innerHTML=`P ${past}x${quanco[p].position}`}
+    else if(quanco[t].type=='bpawn'){document.getElementById(`black${taketurn}`).innerHTML=`P ${past}x${quanco[p].position}`}      
     await remove()
     await xepbanco()
 }
@@ -1174,8 +1249,36 @@ async function retrieve(save){
     var saved=JSON.parse(localStorage.getItem(`file${save}`))
     quanco=saved[0]
     turn=saved[1]
+    await clear()
     await xepbanco()
 }
 function takeaway(save){
     localStorage.setItem(`file${save}`,JSON.stringify(''))
 }
+function listing(taketurn){
+    var add=`
+    <tr>
+        <th style="color: white">${taketurn}</th>
+        <th id="white${taketurn}" style="color: white"></th>
+        <th id="black${taketurn}" style="color: white"></th>
+    </tr>
+    `
+    $('#movelist').append(add)
+}
+function clear(){
+    document.getElementById('movelist').innerHTML=`
+    <tr>
+        <th class="turn">TURN</th>
+        <th class="white">WHITE</th>
+        <th class="black">BLACK</th>
+    </tr>
+    `
+    if(turn=='white'){
+        taketurn=0
+    }
+    else if(turn=='black'){
+        taketurn=1
+        listing(taketurn)
+    }
+}
+// ``
