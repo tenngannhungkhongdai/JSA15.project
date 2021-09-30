@@ -89,6 +89,26 @@ html {
     width: 180px;
     color: white;
 }
+.link{
+    width: 300px;
+    height: 6vh;
+    background-color: rgba( 0, 0, 0, 0.3);
+    font-size: 30px;
+    color: white;
+    border-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;  
+}
+.action{
+    width: 150px;
+    height: 6vh;
+    background-color: rgba( 0, 0, 0, 0.3);
+    font-size: 30px;
+    color: white;
+    border-color: white;
+}
 .right{
     width: 300px;
     height: 98vh;

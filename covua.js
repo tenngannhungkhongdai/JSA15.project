@@ -292,6 +292,7 @@ bclone={
     avatar: ''
 }
 ]
+var bancochuan=quanco
 async function xepbanco(){
     for(i=0;i<o.length;i++){
         o[i].innerHTML=''
@@ -330,7 +331,6 @@ async function xepbanco(){
 xepbanco()
 async function chess(){
     await remove()
-    await capture()
     var p=0
     while(p<quanco.length){
         if(quanco[p].id==this.id){
@@ -610,7 +610,7 @@ async function chess(){
             }
         }
     }
-    await capture()
+    await capture('n')
 }
 function move(p,x,y,limit){
     var n=0
@@ -688,7 +688,7 @@ async function moved(p,x,y){
     await control()
     await remove()
     await xepbanco()
-    await capture()
+    await capture('y')
     if(
         turn=='white'&&
         banco[3].indexOf(quanco[p].position)!=-1&&
@@ -758,7 +758,7 @@ async function killed(p,x,y,t){
     await control()
     await remove()
     await xepbanco()
-    await capture()
+    await capture('y')
 }
 function mercy(){
     for(k=0;k<killable.length;k++){
@@ -1018,7 +1018,7 @@ function danger(p,x,y,limit){
         step++
     }  
 }
-function capture(){
+function capture(tk){
     var bking=0
     while(bking<quanco.length){
         if(quanco[bking].id=='b101'){
@@ -1028,8 +1028,10 @@ function capture(){
     }
     if(bking<quanco.length){if(quanco[bking].checked=='yes'){
         document.getElementById(quanco[bking].position).style.backgroundColor='red'
-        var text=document.getElementById(`white${taketurn-1}`).textContent
-        document.getElementById(`white${taketurn-1}`).innerHTML=`${text} +`
+        if(tk=='y'){
+            var text=document.getElementById(`white${taketurn}`).textContent
+            document.getElementById(`white${taketurn}`).innerHTML=`${text} +`
+        }    
     }}
     var wking=0
     while(wking<quanco.length){
@@ -1040,8 +1042,10 @@ function capture(){
     }
     if(wking<quanco.length){if(quanco[wking].checked=='yes'){
         document.getElementById(quanco[wking].position).style.backgroundColor='red'
-        var text=document.getElementById(`black${taketurn-1}`).textContent
-        document.getElementById(`black${taketurn-1}`).innerHTML=`${text} +`
+        if(tk=='y'){
+            var text=document.getElementById(`black${taketurn-1}`).textContent
+            document.getElementById(`black${taketurn-1}`).innerHTML=`${text} +`
+        }
     }}
     if(turn=='black'){
         if(quanco[bking].checked=='yes'){
@@ -1254,6 +1258,7 @@ function progress(save){
     }
 }
 async function retrieve(save){
+    await remove()
     var saved=JSON.parse(localStorage.getItem(`file${save}`))
     quanco=saved[0]
     turn=saved[1]
@@ -1288,5 +1293,19 @@ function clear(){
         taketurn=1
         listing(taketurn)
     }
+}
+async function restart(){
+    await remove()
+    quanco=bancochuan
+    turn='white'
+    taketurn=0
+    document.getElementById('movelist').innerHTML=`
+        <tr>
+            <th class="turn">TURN</th>
+            <th class="white">WHITE</th>
+            <th class="black">BLACK</th>
+        </tr>
+    `
+    await xepbanco()
 }
 // ``
