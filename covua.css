@@ -44,6 +44,7 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .wpiece{
     color: white;
@@ -52,12 +53,14 @@ html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .di{
     width: 60px;
     height: 60px;
     border-radius: 50%;
     background-color: blue;
+    cursor: pointer;
 }
 .giet{
     width: 60px;
@@ -71,6 +74,7 @@ html {
     height: 60px;
     border-radius: 50%;
     background-color: purple;
+    cursor: pointer;
 }
 .left{
     width: 300px;
