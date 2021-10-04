@@ -292,7 +292,6 @@ bclone={
     avatar: ''
 }
 ]
-var bancochuan=quanco
 async function xepbanco(){
     for(i=0;i<o.length;i++){
         o[i].innerHTML=''
@@ -1264,6 +1263,7 @@ async function retrieve(save){
     turn=saved[1]
     await clear()
     await xepbanco()
+    await capture()
 }
 function takeaway(save){
     localStorage.setItem(`file${save}`,JSON.stringify(''))
@@ -1296,7 +1296,41 @@ function clear(){
 }
 async function restart(){
     await remove()
-    quanco=bancochuan
+    b151.position=banco[7][0]
+    b131.position=banco[7][1]
+    b141.position=banco[7][2]
+    b191.position=banco[7][3]
+    b101.position=banco[7][4]
+    b142.position=banco[7][5]
+    b132.position=banco[7][6]
+    b152.position=banco[7][7]
+    b111.position=banco[6][0]
+    b112.position=banco[6][1]
+    b113.position=banco[6][2]
+    b114.position=banco[6][3]
+    b115.position=banco[6][4]
+    b116.position=banco[6][5]
+    b117.position=banco[6][6]
+    b118.position=banco[6][7]
+    w051.position=banco[0][0]
+    w031.position=banco[0][1]
+    w041.position=banco[0][2]
+    w091.position=banco[0][3]
+    w001.position=banco[0][4]
+    w042.position=banco[0][5]
+    w032.position=banco[0][6]
+    w052.position=banco[0][7]
+    w011.position=banco[1][0]
+    w012.position=banco[1][1]
+    w013.position=banco[1][2]
+    w014.position=banco[1][3]
+    w015.position=banco[1][4]
+    w016.position=banco[1][5]
+    w017.position=banco[1][6]
+    w018.position=banco[1][7]
+    for(i=0;i<32;i++){
+        quanco[i].moved='no'
+    }
     turn='white'
     taketurn=0
     document.getElementById('movelist').innerHTML=`
@@ -1309,3 +1343,4 @@ async function restart(){
     await xepbanco()
 }
 // ``
+// ⛨
