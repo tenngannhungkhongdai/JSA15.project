@@ -1225,7 +1225,15 @@ async function impassant(p,n,d,t){
     await xepbanco()
 }
 for(save=1;save<7;save++){
+    setup(save)
     progress(save)
+}
+function setup(save){
+    var b=JSON.parse(localStorage.getItem(`file${save}`))
+    if(b==null){
+        var a=''
+        localStorage.setItem(`file${save}`,JSON.stringify(a))
+    }
 }
 function upload(save){
     if(turn=='white'){
