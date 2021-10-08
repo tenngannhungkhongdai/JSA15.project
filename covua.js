@@ -10,8 +10,8 @@ let banco=[
 ]
 var movable=[]
 var killable=[]
-var movement=[]
 var taketurn=0
+var run=0
 var o=document.getElementsByClassName('square')
 var turn='white'
 var otrang=['b1','d1','f1','h1','a2','c2','e2','g2','b3','d3','f3','h3','a4','c4','e4','g4','b5','d5','f5','h5','a6','c6','e6','g6','b7','d7','f7','h7','a8','c8','e8','g8']
@@ -316,7 +316,14 @@ async function xepbanco(){
         var piece = document.getElementsByClassName('bpiece')
         for(add=0;add<piece.length;add++){piece[add].removeEventListener('click',chess)}
         taketurn++
-        await listing(taketurn)
+        var add=`
+        <tr>
+            <th style="color: white">${taketurn}</th>
+            <th id="white${taketurn}" style="color: white"></th>
+            <th id="black${taketurn}" style="color: white"></th>
+        </tr>
+        `
+        $('#movelist').append(add)
         turn='black'
     }
     else if(turn=='black'){
@@ -466,14 +473,14 @@ async function chess(){
         kill(p,-1,-1,7)
     }
     else if(quanco[p].type=='wking'){
-        await scout(p,1,0,1)
-        await scout(p,-1,0,1)
-        await scout(p,0,1,1)
-        await scout(p,0,-1,1)
-        await scout(p,1,1,1)
-        await scout(p,1,-1,1)
-        await scout(p,-1,1,1)
-        await scout(p,-1,-1,1)
+        await scout(p,1,0,1,run)
+        await scout(p,-1,0,1,run)
+        await scout(p,0,1,1,run)
+        await scout(p,0,-1,1,run)
+        await scout(p,1,1,1,run)
+        await scout(p,1,-1,1,run)
+        await scout(p,-1,1,1,run)
+        await scout(p,-1,-1,1,run)
         if(
             quanco[p].moved=='no'&&
             quanco[p].checked=='no'
@@ -538,14 +545,14 @@ async function chess(){
         }
     }
     else if(quanco[p].type=='bking'){
-        await scout(p,1,0,1)
-        await scout(p,-1,0,1)
-        await scout(p,0,1,1)
-        await scout(p,0,-1,1)
-        await scout(p,1,1,1)
-        await scout(p,1,-1,1)
-        await scout(p,-1,1,1)
-        await scout(p,-1,-1,1)
+        await scout(p,1,0,1,run)
+        await scout(p,-1,0,1,run)
+        await scout(p,0,1,1,run)
+        await scout(p,0,-1,1,run)
+        await scout(p,1,1,1,run)
+        await scout(p,1,-1,1,run)
+        await scout(p,-1,1,1,run)
+        await scout(p,-1,-1,1,run)
         if(
             quanco[p].moved=='no'&&
             quanco[p].checked=='no'
@@ -653,7 +660,10 @@ async function remove(){
         document.getElementById(otrang[b]).style.backgroundColor='rgb(155,155,155)'
         document.getElementById(oden[b]).style.backgroundColor='rgb(100,100,100)'
     }
-    await mercy()
+    for(k=0;k<killable.length;k++){
+        document.getElementById(quanco[killable[k]].position).innerHTML=`<span class="${quanco[killable[k]].side}" id="${quanco[killable[k]].id}">${quanco[killable[k]].avatar}</span>`
+    }
+    killable=[]
 }
 async function moved(p,x,y){
     var en=0
@@ -758,12 +768,6 @@ async function killed(p,x,y,t){
     await remove()
     await xepbanco()
     await capture('y')
-}
-function mercy(){
-    for(k=0;k<killable.length;k++){
-        document.getElementById(quanco[killable[k]].position).innerHTML=`<span class="${quanco[killable[k]].side}" id="${quanco[killable[k]].id}">${quanco[killable[k]].avatar}</span>`
-    }
-    killable=[]
 }
 async function charge(){
     if(turn=='black'){
@@ -1065,7 +1069,7 @@ function capture(tk){
         }
     }
 }
-async function scout(p,x,y,limit){
+async function scout(p,x,y,limit,run){
     var n=0
     while(n<banco.length){
         if(banco[n].indexOf(quanco[p].position)!=-1){
@@ -1091,8 +1095,9 @@ async function scout(p,x,y,limit){
         await control()
         quanco[p].position=banco[n][d]
         if(quanco[p].checked=='no'){
-            move(p,x,y,limit)
-            kill(p,x,y,limit)
+            run='yes'
+            move(p,x,y,limit,run)
+            kill(p,x,y,limit,run)
         }
         quanco[p].checked=check
         wclone.position=''
@@ -1219,21 +1224,15 @@ async function impassant(p,n,d,t){
         quanco[t].position=banco[n+1][d]
     }  
     if(2==3){alert('you suck')}
-    else if(quanco[t].type=='wpawn'){document.getElementById(`white${taketurn}`).innerHTML=`P ${past}x${quanco[p].position}`}
-    else if(quanco[t].type=='bpawn'){document.getElementById(`black${taketurn}`).innerHTML=`P ${past}x${quanco[p].position}`}      
+    else if(quanco[t].type=='wpawn'){document.getElementById(`white${taketurn}`).innerHTML=`P ${past}x${quanco[t].position}`}
+    else if(quanco[t].type=='bpawn'){document.getElementById(`black${taketurn}`).innerHTML=`P ${past}x${quanco[t].position}`}      
+    await control()
     await remove()
     await xepbanco()
+    await capture('y')
 }
 for(save=1;save<7;save++){
-    setup(save)
     progress(save)
-}
-function setup(save){
-    var b=JSON.parse(localStorage.getItem(`file${save}`))
-    if(b==null){
-        var a=''
-        localStorage.setItem(`file${save}`,JSON.stringify(a))
-    }
 }
 function upload(save){
     if(turn=='white'){
@@ -1252,6 +1251,11 @@ function upload(save){
     }
 }
 function progress(save){
+    var b=JSON.parse(localStorage.getItem(`file${save}`))
+    if(b==null){
+        var a=''
+        localStorage.setItem(`file${save}`,JSON.stringify(a))
+    }
     var saved=JSON.parse(localStorage.getItem(`file${save}`))
     if(saved==''){
         document.getElementById(`filesave${save}`).innerHTML=`<button class="save" onclick="upload(${save});progress(${save})">EMPTY</button>`
@@ -1269,24 +1273,6 @@ async function retrieve(save){
     var saved=JSON.parse(localStorage.getItem(`file${save}`))
     quanco=saved[0]
     turn=saved[1]
-    await clear()
-    await xepbanco()
-    await capture()
-}
-function takeaway(save){
-    localStorage.setItem(`file${save}`,JSON.stringify(''))
-}
-function listing(taketurn){
-    var add=`
-    <tr>
-        <th style="color: white">${taketurn}</th>
-        <th id="white${taketurn}" style="color: white"></th>
-        <th id="black${taketurn}" style="color: white"></th>
-    </tr>
-    `
-    $('#movelist').append(add)
-}
-function clear(){
     document.getElementById('movelist').innerHTML=`
     <tr>
         <th class="turn">TURN</th>
@@ -1301,6 +1287,11 @@ function clear(){
         taketurn=1
         listing(taketurn)
     }
+    await xepbanco()
+    await capture()
+}
+function takeaway(save){
+    localStorage.setItem(`file${save}`,JSON.stringify(''))
 }
 async function restart(){
     await remove()
