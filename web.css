@@ -1,18 +1,18 @@
 .container{
-    width: 99vw;
+    width: 98vw;
     background-color:orange;
     height: max-content;
 }
 .head{
-    width: 99vw;
+    width: 98vw;
     height: 300px;
 }
 .content{
-    width: 99vw;
+    width: 98vw;
     height: max-content;
 }
 .row{
-    width: 99vw;
+    width: 98vw;
     height: max-content;
     display: flex;
     flex-direction: row;

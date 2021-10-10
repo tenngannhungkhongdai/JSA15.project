@@ -1,9 +1,7 @@
-html {
+.container{
     background-image: url('http://sakk-klub.hu/wp-content/uploads/2015/12/BvsC_Wallpaper01.jpg');
 	background-size: cover;
-}
-.container{
-    width: 100vw;
+    width: 98vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -80,6 +78,7 @@ html {
     width: 300px;
     height: max-content;
     background-color: rgba( 0, 0, 0, 0.3);
+
 }
 .turn{
     width: 40px;
